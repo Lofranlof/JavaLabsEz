@@ -15,5 +15,11 @@ public class Main {
         item4.printAll();
         item5.printAll();
         System.out.println(GenericItem.currentID);
+
+        String line = "Candies 'Mask'; 45; 120";
+        String[] item_fld = line.split(";");
+        FoodItem item6 = new FoodItem(item_fld[0], Float.parseFloat(item_fld[1]), (short)Float.parseFloat(item_fld[2]));
+        item6.printAll();
+
     }
 }

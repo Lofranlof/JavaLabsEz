@@ -23,7 +23,7 @@ class GenericItem {
         this.ID = GenericItem.currentID++;
     }
 
-    public GenericItem() { }
+    public GenericItem() { this.ID = GenericItem.currentID++; }
 
     public int ID;
     public String name;
