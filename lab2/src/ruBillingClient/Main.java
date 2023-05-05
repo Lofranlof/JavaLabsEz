@@ -5,6 +5,9 @@ import ruBillingStocklist.FoodItem;
 import ruBillingStocklist.TechnicalItem;
 import ruBillingStocklist.Category;
 import ruBillingStocklist.ItemCatalog;
+import ruItmoExceptions.CatalogLoadException;
+import ruItmoExceptions.ItemAlreadyExistsException;
+import sync.U1901Bank;
 
 public class Main {
     public static void main(String[] args) {
@@ -25,19 +28,25 @@ public class Main {
         System.out.println(item5.getID());
 
         String line = "Candies 'Mask'; 45; 120";
-        String[] item_fld = line.split(";");
+        var item_fld = line.split(";");
         FoodItem item6 = new FoodItem(item_fld[0], Float.parseFloat(item_fld[1]),
                 (short) Float.parseFloat(item_fld[2]));
         item6.printAll();
 
         ItemCatalog catalog = new ItemCatalog();
-        catalog.addItem(item1);
-        catalog.addItem(item2);
-        catalog.addItem(item3);
-        catalog.addItem(item4);
-        catalog.addItem(item5);
-        catalog.addItem(item6);
-
+        try {
+            catalog.addItem(item1);
+            catalog.addItem(item2);
+            catalog.addItem(item3);
+            catalog.addItem(item4);
+            catalog.addItem(item5);
+            catalog.addItem(item6);
+            //catalog.addItem(item1);
+        }
+        catch(ItemAlreadyExistsException e)
+        {
+            System.out.println("One of the items already exists in some of the collections");
+        }
         long begin = new Date().getTime();
 
         for (int i = 0; i < 100000000; i++)
@@ -52,8 +61,16 @@ public class Main {
         System.out.println("In ArrayList: " + (end - begin));
 
         CatalogLoader loader = new CatalogStubLoader();
-        loader.load(catalog);
+        try {
+            loader.load(catalog);
+        }
+        catch(CatalogLoadException e) {
+            System.out.println("CatalogLoadException");
+        }
 
         catalog.printItemsContents();
+
+        U1901Bank bank = new U1901Bank();
+        bank.calc(10, 1);
     }
 }
